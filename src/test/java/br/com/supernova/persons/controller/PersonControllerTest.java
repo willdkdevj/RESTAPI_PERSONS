@@ -22,6 +22,9 @@ import static br.com.supernova.persons.builder.PersonBuilder.jsonToString;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,5 +62,19 @@ public class PersonControllerTest {
                 .content(jsonToString(personDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message", is(messageResponseDTO.getMessage())));
+    }
+
+    @Test
+    void testWhenGETWithValidIsCalledThenAPersonShouldBeReturned() throws Exception {
+        PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
+
+        when(service.findByPerson(personDTO.getId())).thenReturn(personDTO);
+
+        mockMvc.perform(get(URL_PATH + "/" + personDTO.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(personDTO.getId())))
+                .andExpect(jsonPath("$.firstName", is(personDTO.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(personDTO.getLastName())));
     }
 }
