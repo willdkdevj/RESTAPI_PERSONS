@@ -2,14 +2,13 @@ package br.com.supernova.persons.builder;
 
 import br.com.supernova.persons.dto.request.PersonDTO;
 import br.com.supernova.persons.dto.request.PhoneDTO;
-import br.com.supernova.persons.entity.Person;
-import br.com.supernova.persons.enums.PhoneType;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Builder;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Builder
@@ -32,31 +31,21 @@ public class PersonBuilder {
         PHONES.add(PhoneBuilder.builder().build().toPhoneDTO());
     }
 
+    public static String jsonToString(PersonDTO personDTO){
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.registerModule(new JavaTimeModule());
+
+            return objectMapper.writeValueAsString(personDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public PersonDTO toPersonDTO(){
         return new PersonDTO(PERSON_ID, FIRST_NAME, LAST_NAME, CPF, BIRTH_DATE, PHONES);
     }
-    /*
-    public static PersonDTO personDTOFake() {
-        return PersonDTO.builder()
-                .id(PERSON_ID)
-                .firstName(FIRST_NAME)
-                .lastName(LAST_NAME)
-                .cpf(CPF)
-                .birthDate("11-07-2000")
-                .phones(Collections.singletonList(PhoneBuilder.phoneDTOFake()))
-                .build();
-    }
 
-    public static Person personEntityFake() {
-        return Person.builder()
-                .id(PERSON_ID)
-                .firstName(FIRST_NAME)
-                .lastName(LAST_NAME)
-                .cpf(CPF)
-                .birthDate(BIRTH_DATE)
-                .phones(Collections.singletonList(PhoneBuilder.phoneEntityFake()))
-                .build();
-    }
-
-     */
 }

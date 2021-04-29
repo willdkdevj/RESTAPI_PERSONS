@@ -131,6 +131,9 @@ public class PersonServiceTest {
     @Test
     void testProvidedToDeleteInvalidPersonDTOIDThenAnExceptionThrown() {
         final Long INVALID_ID=2L;
-        PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
+
+        when(repository.findById(INVALID_ID)).thenReturn(Optional.empty());
+
+        assertThrows(PersonNotFoundException.class, () -> service.deletedPerson(INVALID_ID));
     }
 }
