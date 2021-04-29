@@ -104,4 +104,33 @@ public class PersonServiceTest {
 
         assertEquals(expectedSuccessMessageID, expectedSuccessMessage);
     }
+
+    @Test
+    void testProvidedToUpdateInvalidPersonDTOIDThenAnExceptionThrown() {
+        final Long INVALID_ID = 2L;
+        PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
+
+        when(repository.findById(INVALID_ID)).thenReturn(Optional.empty());
+
+        assertThrows(PersonNotFoundException.class, () -> service.updateById(INVALID_ID, personDTO));
+
+    }
+
+    @Test
+    void testProvidedValidPersonIDThenReturnSuccessOnDelete() throws PersonNotFoundException {
+        PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
+        Person inspectPerson = mapper.toModel(personDTO);
+
+        when(repository.findById(inspectPerson.getId())).thenReturn(Optional.of(inspectPerson));
+
+        service.deletedPerson(inspectPerson.getId());
+
+        verify(repository, times(1)).deleteById(inspectPerson.getId());
+    }
+    
+    @Test
+    void testProvidedToDeleteInvalidPersonDTOIDThenAnExceptionThrown() {
+        final Long INVALID_ID=2L;
+        PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
+    }
 }
