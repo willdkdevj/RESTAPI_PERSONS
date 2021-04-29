@@ -9,6 +9,8 @@ import br.com.supernova.persons.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,9 @@ public class PersonService {
         Person localePerson = personRepository.findById(id).orElseThrow(
                 () -> new PersonNotFoundException(id)
         );
-
-        return personMapper.toDTO(localePerson);
+        LocalDate birthDate = localePerson.getBirthDate();
+        PersonDTO personDTO = getDateFormatterPersonDTO(localePerson, birthDate);
+        return personDTO;
     }
 
     public void deletedPerson(Long id) throws PersonNotFoundException {
@@ -64,5 +67,14 @@ public class PersonService {
         return MessageResponseDTO.builder()
                 .message(message + id)
                 .build();
+    }
+
+
+    private PersonDTO getDateFormatterPersonDTO(Person localePerson, LocalDate birthDate) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formatDate = birthDate.format(dateTimeFormatter);
+        PersonDTO personDTO = personMapper.toDTO(localePerson);
+        personDTO.setBirthDate(formatDate);
+        return personDTO;
     }
 }

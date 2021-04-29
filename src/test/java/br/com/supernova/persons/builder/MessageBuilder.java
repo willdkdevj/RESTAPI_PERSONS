@@ -9,4 +9,10 @@ public class MessageBuilder {
                 .message("Created person with ID - " + id)
                 .build();
     }
+
+    public static final MessageResponseDTO updateInspectMessageResponse(Long id){
+        return MessageResponseDTO.builder()
+                .message("Updated person with ID - " + id)
+                .build();
+    }
 }
