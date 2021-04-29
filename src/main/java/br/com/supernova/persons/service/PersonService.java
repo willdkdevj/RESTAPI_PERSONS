@@ -6,9 +6,7 @@ import br.com.supernova.persons.entity.Person;
 import br.com.supernova.persons.exceptions.PersonNotFoundException;
 import br.com.supernova.persons.mapper.PersonMapper;
 import br.com.supernova.persons.repository.PersonRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

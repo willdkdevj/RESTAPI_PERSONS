@@ -4,8 +4,7 @@ import br.com.supernova.persons.dto.request.PersonDTO;
 import br.com.supernova.persons.dto.response.MessageResponseDTO;
 import br.com.supernova.persons.exceptions.PersonNotFoundException;
 import br.com.supernova.persons.service.PersonService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/people")
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class PersonControllerImpl implements PersonController{
 
-    private PersonService personService;
+    private final PersonService personService;
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO registerPeople(PersonDTO personDTO) {
+    public MessageResponseDTO registerPeople(@RequestBody PersonDTO personDTO) {
         return personService.registerPerson(personDTO);
     }
 

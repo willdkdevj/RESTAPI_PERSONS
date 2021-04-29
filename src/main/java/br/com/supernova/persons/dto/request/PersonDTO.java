@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -30,7 +29,6 @@ public class PersonDTO {
 
     @NotEmpty
     @CPF
-    @Max(value = 14)
     private String cpf;
 
     private String birthDate;
@@ -38,4 +36,6 @@ public class PersonDTO {
     @Valid
     @NotEmpty
     private List<PhoneDTO> phones;
+
+
 }

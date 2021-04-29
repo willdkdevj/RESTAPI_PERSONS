@@ -28,4 +28,5 @@ public class Phone {
     @Column(nullable = false)
     @ApiModelProperty(notes = "Value cannot be null", required = true)
     private String number;
+
 }
