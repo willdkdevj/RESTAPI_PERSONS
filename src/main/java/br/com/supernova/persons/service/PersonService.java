@@ -51,14 +51,15 @@ public class PersonService {
     }
 
     public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
-        verifyIfExists(id);
+        Person exists = verifyIfExists(id);
         Person converterPerson = personMapper.toModel(personDTO);
+        converterPerson.setId(exists.getId());
         Person updatedPerson = personRepository.save(converterPerson);
-        return createMessageResponse(updatedPerson.getId(), "Updated person with ID - ");
+        return createMessageResponse(converterPerson.getId(), "Updated person with ID - ");
     }
 
-    private void verifyIfExists(Long id) throws PersonNotFoundException {
-        personRepository.findById(id).orElseThrow(
+    private Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id).orElseThrow(
                 () -> new PersonNotFoundException(id)
         );
     }

@@ -1,10 +1,9 @@
 package br.com.supernova.persons.controller;
 
+import br.com.supernova.persons.builder.MessageBuilder;
 import br.com.supernova.persons.builder.PersonBuilder;
 import br.com.supernova.persons.dto.request.PersonDTO;
-import br.com.supernova.persons.dto.request.PhoneDTO;
 import br.com.supernova.persons.dto.response.MessageResponseDTO;
-import br.com.supernova.persons.enums.PhoneType;
 import br.com.supernova.persons.exceptions.PersonNotFoundException;
 import br.com.supernova.persons.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +23,7 @@ import java.util.List;
 
 import static br.com.supernova.persons.builder.MessageBuilder.*;
 import static br.com.supernova.persons.builder.PersonBuilder.jsonToString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,14 +71,14 @@ public class PersonControllerTest {
 
     @Test
     void testWhenGETWithValidIsCalledThenAPersonShouldBeReturned() throws Exception {
+        final Long VALID_ID = 1L;
         PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
 
-        when(service.findByPerson(personDTO.getId())).thenReturn(personDTO);
+        when(service.findByPerson(VALID_ID)).thenReturn(personDTO);
 
         mockMvc.perform(get(URL_PATH + "/" + personDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(personDTO.getId())))
                 .andExpect(jsonPath("$.firstName", is(personDTO.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(personDTO.getLastName())));
     }
@@ -112,10 +112,11 @@ public class PersonControllerTest {
     void testWhenPUTIsCalledThenAPersonDTOShouldBeUpdated() throws Exception {
         var updatePersonDTOID = 1L;
         PersonDTO personDTO = PersonBuilder.builder().build().toPersonDTO();
-        MessageResponseDTO messageResponseDTO = updateMessageResponse("Person successfully updated with ID", 1L);
+        personDTO.setCpf("314.684.398-63");
+        personDTO.setId(updatePersonDTOID);
+        MessageResponseDTO messageResponseDTO = MessageBuilder.updateInspectMessageResponse(personDTO.getId());
 
-        when(service.updateById(updatePersonDTOID, personDTO))
-            .thenReturn(messageResponseDTO);
+        when(service.updateById(updatePersonDTOID, personDTO)).thenReturn(messageResponseDTO);
 
         mockMvc.perform(put(URL_PATH + "/" + updatePersonDTOID)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -133,9 +134,4 @@ public class PersonControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    private MessageResponseDTO updateMessageResponse(String message, Long id) {
-        return MessageResponseDTO.builder()
-                .message(message + id)
-                .build();
-    }
 }
