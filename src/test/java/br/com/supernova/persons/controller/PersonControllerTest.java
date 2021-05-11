@@ -23,7 +23,6 @@ import java.util.List;
 
 import static br.com.supernova.persons.builder.MessageBuilder.*;
 import static br.com.supernova.persons.builder.PersonBuilder.jsonToString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
