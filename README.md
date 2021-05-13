@@ -181,6 +181,18 @@ Também foi passado para o objeto MockMvc o tipo de conteúdo (*Content Type*) a
 O método mockMvc.perform() retorna um objeto do tipo *ResultAction*, é um objeto utilizado para assegurar o resultado do teste, similar a forma usada pelo método ``assertEquals`` do JUnit. Desta maneira, é possível realizar a checagem do status HTTP, este caso o retorno OK (HTTP.200), e que a próxima view será “signin”.
 
 ## A Hospedagem na Plataforma Heroku
+Para hospedar nosso código na plataforma **Heroḱu** é necessário criar uma conta e atrelá-la a conta no **GitHub**, desta forma, ao logar no *Dashboard* do Heroku é criado um novo aplicativo apontando a conta do GitHub informando o nome do repositório em que está o projeto. Além disso, é habilitado a opção de *deploy* automático, para que todas as vezes que for realizado um *PUSH* para o repositório seja realizado o deploy da aplicação.
+
+Como a aplicação está com a versão 11 do Java é necessário passar um parâmetro de configuração ao Heroku, pois por padrão, o Heroku suporta aplicações com a versão 8. Desta forma, no diretório raiz do projeto é criado o arquivo de configuração ``system.properties`` com o seguinte snippet
+```sh
+java.runtime.version=11
+```
+
+Este processo de criação foi realizado antes de "subir" a aplicação para a plataforma, desta maneira, ela reconhece a aplicação com a versão informada.
+
+![Deploy Heroku](https://github.com/willdkdevj/assets/blob/main/Heroku/deploy_heroku_person.png)
+
+Para acessar a aplicação diponibilizada em *cloud*, acesse o seguinte link <https://apipeople-dio.herokuapp.com/api/v1/people>. Desta forma, é possível realizar as interações com a ferramenta das requisições HTTP.
 
 ## Como Está Documentado o Projeto
 O framework ``Swagger UI`` auxilia na criação da documentação do projeto, por possuir uma variedade de ferramentas que permite modelar a descrição, consumo e visualização de serviços da API REST. No projeto foi incluída suas dependências (Swagger-UI, Swagger-Core) para habilitá-lo para uso na aplicação, desta forma, no *snippet* abaixo é apresentado o Bean principal para sua configuração, presente na classe SwaggerConfig.
@@ -218,6 +230,8 @@ cd /RESTAPI_PERSONS
 # Para Executar a suíte de testes desenvolvidas, basta executar o seguinte comando
 ./mvnw clean test
 ```
+
+Para testar a API, como a aplicação consome e produz JSON, é necessário utilizar uma ferramenta que permite realizar requisições HTTP neste formato, como o Postman, Insomnia, entre outras. Na diretório ``JSON-TEST-HTTP/``  há um arquivo que pode ser importado a qualquer uma destas ferramentas, onde já estarão formatados os tipos de requisições suportadas pela API para a realização dos testes.
 
 ## Agradecimentos
 Obrigado por ter acompanhado aos meus esforços para desenvolver este Projeto utilizando a estrutura do Spring para criação de uma API REST 100% funcional, utilizando os recursos do Spring data JPA para facilitar as consultas, o padrão DTO para inclusão e atualização dos dados, além de, listar grandes quantidades de dados paginas, com ordenação e busca, utilizando os conceitos do TDD para implementar testes de integração para validar nossos endpoints com o MockMVC e gerar a documentação de forma automática através do Swagger! :octocat:
