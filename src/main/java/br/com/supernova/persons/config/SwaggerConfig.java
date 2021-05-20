@@ -16,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private static final String API_TITLE = "Registering and Managing People Registration";
+    private static final String API_TITLE = "REST API of People Registration";
     private static final String API_DESCRIPTION = "Spring Boot REST API for registering and managing people in a fictitious organization";
     private static final String CONTACT_NAME = "William Derek Dias";
     private static final String CONTACT_GITHUB = "https://github.com/willdkdevj";
